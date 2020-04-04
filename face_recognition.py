@@ -72,7 +72,8 @@ def load_face_encodings(faces_folder_path):
 
 
 def recognize_faces_in_video(face_encodings, person_names):
-    faceClassifier = cv2.CascadeClassifier(data_dir + '/opencv/haarcascade_frontalface_default.xml')
+    cascPath = "haarcascade_frontalface_default.xml"
+    faceClassifier = cv2.CascadeClassifier(cv2.data.haarcascades + cascPath) 
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
@@ -84,12 +85,8 @@ def recognize_faces_in_video(face_encodings, person_names):
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        face_rects = faceClassifier.detectMultiScale(
-            gray,
-            scaleFactor = 1.1,
-            minNeighbors = 5,
-            minSize = (50, 50),
-            flags = cv2.CASCADE_SCALE_IMAGE)
+        face_rects = faceClassifier.detectMultiScale(gray,1.3,5)
+
 
         for (x, y, w, h) in face_rects:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
